@@ -8,8 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,18 +20,26 @@ import java.net.MalformedURLException;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Iterator;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
-import android.widget.LinearLayout;
 
 public class GiphyActivity extends Activity {
 
-	EditText searchText;
-	Button goButton;
+    AutoCompleteTextView autoComplete;
+    // adapter for auto-complete
+    ArrayAdapter<String> myAdapter;
+
+    // for database operations
+    DatabaseHandler databaseHandler;
+    // just to add some initial value
+    String[] item = new String[] {"Please search..."};
+
+    Button goButton;
 	private final String URL = 
 			"http://api.giphy.com/v1/gifs/search?q=%s&api_key=dc6zaTOxFJmzC&limit=%s&offset=%s";
 	private String limit = "1";
@@ -41,24 +50,43 @@ public class GiphyActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_giphy);
 		goButton = (Button)findViewById(R.id.goButton);
 		activity = this;
         webview = (WebView)findViewById(R.id.webView);
-		goButton.setOnClickListener(
+        try {
+
+            // instantiate database handler
+            databaseHandler = new DatabaseHandler(GiphyActivity.this);
+
+            // put sample data to database
+            insertSampleData();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        autoComplete = (AutoCompleteTextView) findViewById(R.id.searchText);
+            // add the listener so it will tries to suggest while the user types
+            autoComplete.addTextChangedListener(new AutoCompleteTextChangedListener(this));
+
+            // set our adapter
+            myAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, item);
+            autoComplete.setAdapter(myAdapter);
+		    goButton.setOnClickListener(
 		        new View.OnClickListener()
 		        {
 		            public void onClick(View view)
-		            {
-		            	searchText = (EditText) findViewById(R.id.searchText);
+                    {
+                        final String searchText = autoComplete.getText().toString();
 		            	System.out.println("SearchText: " + searchText);
 		            	Thread thread = new Thread(new Runnable(){
 		            	    @Override
 		            	    public void run() {
 		            	        try {
-		            	        	String api_url = URLEncoder.encode(String.format(URL,searchText.getText().toString(),limit, offset), "UTF-8");
-		    		            	URLConnection connection = new java.net.URL(api_url).openConnection();
+		            	        	String api_url = String.format(URL, URLEncoder.encode(searchText, "UTF-8"), limit, offset);
+		    		            	System.out.println(api_url);
+                                    URLConnection connection = new java.net.URL(api_url).openConnection();
 					            	connection.setRequestProperty("Accept-Charset", "UTF-8");
 					            	gifUrl = toJSON(connection);
                                     GiphyActivity.activity.runOnUiThread(new Runnable() {
@@ -110,6 +138,38 @@ public class GiphyActivity extends Activity {
 		        }
 		        );
 	}
+
+    public void insertSampleData(){
+        try {
+            final InputStream file = getAssets().open("lookahed.txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(file));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                databaseHandler.create(new LookAhead(line));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    // this function is used in CustomAutoCompleteTextChangedListener.java
+    public String[] getItemsFromDb(String searchTerm){
+
+        // add items on the array dynamically
+        List<LookAhead> lookAheadList = databaseHandler.read(searchTerm);
+        int rowCount = lookAheadList.size();
+
+        String[] item = new String[rowCount];
+        int x = 0;
+
+        for (LookAhead record : lookAheadList) {
+            item[x] = record.name;
+            x++;
+        }
+
+        return item;
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

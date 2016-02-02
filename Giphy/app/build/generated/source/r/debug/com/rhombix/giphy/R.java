@@ -1630,7 +1630,7 @@ containing a value of this type.
         public static final int end_padder=0x7f0b0062;
         public static final int expand_activities_button=0x7f0b0025;
         public static final int expanded_menu=0x7f0b0038;
-        public static final int goButton=0x7f0b0052;
+        public static final int goButton=0x7f0b0051;
         public static final int home=0x7f0b0004;
         public static final int homeAsUp=0x7f0b000d;
         public static final int icon=0x7f0b0029;
@@ -1656,7 +1656,7 @@ containing a value of this type.
         public static final int scrollIndicatorDown=0x7f0b0035;
         public static final int scrollIndicatorUp=0x7f0b0032;
         public static final int scrollView=0x7f0b0033;
-        public static final int searchText=0x7f0b0051;
+        public static final int searchText=0x7f0b0052;
         public static final int searchText1=0x7f0b0054;
         public static final int search_badge=0x7f0b0045;
         public static final int search_bar=0x7f0b0044;

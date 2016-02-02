@@ -1,48 +1,59 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     tools:context="com.rhombix.giphy.GiphyActivity"
     tools:ignore="MergeRootFrame" >
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal|bottom">
+        android:layout_height="match_parent">
 
         <EditText
-            android:id="@+id/searchText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignRight="@+id/goButton"
             android:ems="10"
-             android:height="20dp">
+             android:height="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/goButton"
+            android:layout_alignStart="@+id/goButton"
+            android:layout_row="0"
+            android:layout_column="31"
+            android:visibility="invisible">
 
             <requestFocus />
         </EditText>
 
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchText" />
+
         <Button
             android:id="@+id/goButton"
-            android:layout_width="344dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/searchText"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="24dp"
             android:text="Go"
-            android:layout_gravity="center_horizontal|top" />
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@+id/searchText"
+            android:layout_centerHorizontal="true"
+            android:layout_row="2"
+            android:layout_column="1" />
 
         <WebView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:id="@+id/webView"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:focusable="true" />
+            android:focusable="true"
+            android:layout_row="10"
+            android:layout_column="31"
+            android:layout_gravity="bottom" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </FrameLayout>

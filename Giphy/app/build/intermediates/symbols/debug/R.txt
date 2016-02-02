@@ -476,7 +476,7 @@ int id end 0x7f0b0019
 int id end_padder 0x7f0b0062
 int id expand_activities_button 0x7f0b0025
 int id expanded_menu 0x7f0b0038
-int id goButton 0x7f0b0052
+int id goButton 0x7f0b0051
 int id home 0x7f0b0004
 int id homeAsUp 0x7f0b000d
 int id icon 0x7f0b0029
@@ -502,7 +502,7 @@ int id screen 0x7f0b0014
 int id scrollIndicatorDown 0x7f0b0035
 int id scrollIndicatorUp 0x7f0b0032
 int id scrollView 0x7f0b0033
-int id searchText 0x7f0b0051
+int id searchText 0x7f0b0052
 int id searchText1 0x7f0b0054
 int id search_badge 0x7f0b0045
 int id search_bar 0x7f0b0044
